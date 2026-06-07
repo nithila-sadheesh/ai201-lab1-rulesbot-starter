@@ -116,11 +116,11 @@ handle these cases better, at the cost of more implementation complexity.
 **Actual chunk count produced across all 8 rule books:**
 
 ```
-[your answer here]
+There are 149 total cunks across all 8 rule books. 
 ```
 
 **One thing that surprised you or didn't match your expectations:**
 
 ```
-[your answer here]
+I also printed out the specific rule book chunk counts and got: {'Catan': 18, 'Clue': 21, 'Codenames': 16, 'Monopoly': 23, 'Pandemic': 18, 'Risk': 20, 'Ticket To Ride': 16, 'Uno': 17}. I'm suprised that the number of chunks across rule books is roughly similar as I personally have seen some very lengthy and very concise rulebooks. 
 ```

@@ -29,11 +29,29 @@ def generate_response(query, retrieved_chunks):
 
     Return the response as a plain string.
     """
+    retrieved_chunks = [chunk for chunk in retrieved_chunks if chunk["distance"] <= 0.8]
+
     if not retrieved_chunks:
         return (
             "I couldn't find anything relevant in the loaded rule books. "
             "Try rephrasing your question — or check that your ingestion pipeline is working."
         )
-
+    
     # Your implementation here.
-    return "⚙️ Response generation not yet implemented. Complete Milestone 3 to activate answers."
+    context = ""
+    for i, chunk in enumerate(retrieved_chunks):
+      context += f'<source game="{chunk["game"]}" rank="{i+1}">\n'
+      context += chunk["text"] + "\n"
+      context += "</source>\n\n"
+
+    response = _client.chat.completions.create(
+        model=LLM_MODEL,
+        messages=[
+            {"role": "system", "content": f"""Provide answers from the retrieved context below alone. If the retrieved context does not contain a direct, specific answer, do not use your general knowledge about game rulebooks. Do not supplement any retrieved text with any outside knowledge, even if you believe it to be correct. Instead, say \"I couldn't find that in the loaded rule books.\" Do not say anything like \"according to the retrieved context\". Also, provide the name of the game as a citation.
+
+            Retrieved context:
+            {context}"""},
+            {"role": "user", "content": query}
+        ]
+    )
+    return response.choices[0].message.content

@@ -1,6 +1,6 @@
 import gradio as gr
 from ingest import load_documents, chunk_document
-from retriever import embed_and_store, retrieve, get_collection
+from retriever import embed_and_store, retrieve, get_collection, chunks_per_game
 from generator import generate_response
 
 
@@ -34,6 +34,7 @@ def run_ingestion():
     if all_chunks:
         embed_and_store(all_chunks)
         print(f"Ingestion complete. {len(all_chunks)} chunks stored.")
+        print(chunks_per_game())
     else:
         print(
             "\n⚠️  No chunks produced. Make sure chunk_document() is implemented in ingest.py.\n"
@@ -76,10 +77,10 @@ with gr.Blocks(
         with gr.Column(scale=3):
             gr.ChatInterface(
                 fn=chat,
-                type="messages",
+                #type="messages",
                 chatbot=gr.Chatbot(
                     height=440,
-                    type="messages",
+                    #type="messages",
                     placeholder=(
                         "<div style='text-align:center; color:#9ca3af; margin-top:3rem;'>"
                         "Ask a rules question to get started — no arguing required 🎯"
@@ -113,16 +114,16 @@ with gr.Blocks(
                                margin:0 0 0.5rem; letter-spacing:0.05em;">
                         📚 LOADED RULE BOOKS
                     </p>
-                    <ul style="font-size:0.85rem; color:#5b21b6; list-style:none;
+                    <ul style="font-size:0.85rem; color:#5b21b6 !important; list-style:none;
                                 padding:0; margin:0; line-height:1.8;">
-                        <li>🏔️ Catan</li>
-                        <li>🔍 Clue</li>
-                        <li>🎯 Codenames</li>
-                        <li>🏦 Monopoly</li>
-                        <li>🦠 Pandemic</li>
-                        <li>🌍 Risk</li>
-                        <li>🚂 Ticket to Ride</li>
-                        <li>🃏 Uno</li>
+                        <li style="color:#5b21b6 !important;">🏔️ Catan</li>
+                        <li style="color:#5b21b6 !important;">🔍 Clue</li>
+                        <li style="color:#5b21b6 !important;">🎯 Codenames</li>
+                        <li style="color:#5b21b6 !important;">🏦 Monopoly</li>
+                        <li style="color:#5b21b6 !important;">🦠 Pandemic</li>
+                        <li style="color:#5b21b6 !important;">🌍 Risk</li>
+                        <li style="color:#5b21b6 !important;">🚂 Ticket to Ride</li>
+                        <li style="color:#5b21b6 !important;">🃏 Uno</li>
                     </ul>
                     <hr style="border:none; border-top:1px solid #ddd6fe; margin:0.75rem 0;">
                     <p style="font-size:0.75rem; color:#7c3aed; margin:0; line-height:1.5;">

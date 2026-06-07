@@ -20,6 +20,14 @@ def get_collection():
     """Return the ChromaDB collection. Used by app.py during ingestion."""
     return _collection
 
+def chunks_per_game():
+    all_items = _collection.get(include=["metadatas"])
+    counts = {}
+    for meta in all_items["metadatas"]:
+        game = meta["game"]
+        counts[game] = counts.get(game, 0) + 1
+    return counts
+
 
 def embed_and_store(chunks):
     """
@@ -51,7 +59,6 @@ def retrieve(query, n_results=N_RESULTS):
     Find the most relevant rule chunks for a user's question.
 
     TODO — Milestone 2:
-
     Use _collection.query() to run a semantic search. It takes:
       - query_texts : a list containing your query string
       - n_results   : how many results to return
@@ -69,4 +76,8 @@ def retrieve(query, n_results=N_RESULTS):
         return []
 
     # Your implementation here.
-    return []
+    results = _collection.query(query_texts=[query], n_results=n_results, include=["documents", "metadatas", "distances"])
+    chunks =  [{"text": results["documents"][0][i], "game": results["metadatas"][0][i]["game"], "distance": results["distances"][0][i]} for i in range(n_results)]
+    for chunk in chunks:
+        print(f"[{chunk['game']}] (dist: {chunk['distance']:.3f}) {chunk['text'][:80]}...")
+    return chunks
